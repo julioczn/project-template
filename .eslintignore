@@ -1,0 +1,9 @@
+node_modules/
+docs/
+dist/
+coverage/
+src/metadata.ts
+
+.eslintrc.js
+vitest.config.mjs
+vitest.config.e2e.mjs
