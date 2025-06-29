@@ -1,6 +1,6 @@
 import './shared/trace/trace';
 
-import { ConfigService } from '@nestjs/config';
+import { patchNestjsSwagger, ZodValidationPipe } from '@anatine/zod-nestjs';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -17,21 +17,21 @@ async function bootstrap() {
 	});
 	app.useLogger(app.get(Logger));
 
-	const configService = app.get(ConfigService);
+	app.enableCors();
 
-	app.enableCors({
-		origin: configService.getOrThrow<string>('CORS_ORIGIN'),
-		methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-		credentials: true,
-	});
 	app.use(helmet());
 	app.use(compression());
+
 	app.useBodyParser('json', { limit: '1mb' });
 	app.useBodyParser('urlencoded', { limit: '1mb', exetended: true });
+
+	app.useGlobalPipes(new ZodValidationPipe());
 	app.useGlobalFilters(new AllExceptionsFilter());
 
+	patchNestjsSwagger();
+
 	const config = new DocumentBuilder()
-		.setTitle('Arena Community AI')
+		.setTitle('App Name')
 		.setVersion('1.0')
 		.addBearerAuth(
 			{
