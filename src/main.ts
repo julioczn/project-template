@@ -9,7 +9,7 @@ import helmet from 'helmet';
 import { Logger } from 'nestjs-pino';
 
 import { AppModule } from './app.module';
-import { AllExceptionsFilter } from './pipes/http-exception.filter';
+import { AllExceptionsFilter } from './shared/http/http-exception.filter';
 
 async function bootstrap() {
 	const app = await NestFactory.create<NestExpressApplication>(AppModule, {
